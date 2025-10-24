@@ -1,0 +1,24 @@
+<header th:fragment="header(isLoggedIn)">
+    <div class="logo">
+        <a th:href="@{/}">
+            <img th:src="@{/images/Billede1.png}" alt="WishHub Logo">
+        </a>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Forside</a></li>
+            <li><a th:href="@{/wishlists}">Ønskelister</a></li>
+
+            <!-- Hvis brugeren er logget ind -->
+            <li th:if="${isLoggedIn}">
+                <a th:href="@{/logout}">Log ud</a>
+            </li>
+
+            <!-- Hvis brugeren IKKE er logget ind -->
+            <li th:if="${!isLoggedIn}">
+                <a th:href="@{/login}">Log ind</a>
+            </li>
+        </ul>
+    </nav>
+</header>

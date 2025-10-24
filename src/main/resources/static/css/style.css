@@ -1,0 +1,59 @@
+/* Tilføj baggrundsfarve der matcher logo */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4eff4; /* Skift til logoets baggrundsfarve */
+    color: #43163e;
+}
+
+/* Header med logo og navigation */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #f4eff4; /* evt. let kontrast til body */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo img {
+    height: 50px; /* juster efter dit logo */
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #b8b0bc; /* lidt interaktiv farve */
+}
+
+/* Main indhold centreret */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 80px); /* minus header højde */
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
