@@ -33,7 +33,20 @@ import java.util.List;
 // *Cursor refers to where the current row to be read from is - imagine a little arrow that points out from the row, on the row that is beign in focus by Java's in-memo´ry.
 
 // The use of this Interface acts as a bridge between raw SQL data and the java objects in the application.
+
+
+
+// KeyHolder:
 //
+
+
+//Practice of selecting specific columns in SELECT statements, instead of just writing *, when the methods either way aims
+//to retreive to select all columns of a table - reasons:
+// - it is easier to build the tables and add columns, as the repository methods still only selects the same columns in
+//   in the SELECT statement. MODULARITY. This avoids breaking the contract between methods and retreiving uncessarry data.
+//   Mapping reliability in other words.
+
+
 
 
 @org.springframework.stereotype.Repository
@@ -191,8 +204,36 @@ public class Repository {
 
     //Method 6 ___________________________________________________________________________________________________
 
-    public Lists createNewList(Lists lists) {
-        String sql = "INSERT INTO lists (ListName) VALUES (?, ?)";
+    //This method creates a new WishList. It requires a populate Lists object from the template and controller method,
+    //aaaaaand, a userID, as a WishList is personal. The userID should be obtained from the logged-in user.(in the session?).
 
+    //
+    public Lists createNewList(Lists lists, int userID) {
+        String sql = "INSERT INTO Lists (ListName, UserID) VALUES (?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, lists.getListName());
+            ps.setInt(2, userID);
+            return ps;
+        }, keyHolder);
+
+        int generatedId = keyHolder.getKey().intValue();
+
+        return new Lists( lists.getListName(), generatedId, userID);
     }
+
+    //Method 7 _____________________________________________________________________________________________________
+
+    public List<Lists> getAllListsByUser(int userID) {
+        String sql = "SELECT ListID, ListName, UserID FROM Lists WHERE UserID = ?";
+        return jdbcTemplate.query(sql, listsRowMapper, userID);
+    }
+
+
+
+
+
+
 }
