@@ -11,17 +11,13 @@ public class Wish{
     private String wishName;
     private String description;
     private String imgDataPath;
-    private List<Lists> lists;
 
-    User user;
 
-    public Wish(int wishID, String wishName, String description, String imgdatapath, User user, List<Lists> lists) {
+    public Wish(int wishID, String wishName, String description, String imgdatapath) {
         this.wishID = wishID;
         this.wishName = wishName;
         this.description = description;
         this.imgDataPath = imgdatapath;
-        this.user = user;
-        this.lists = lists;
     }
 
     public int getWishID() {
@@ -40,10 +36,6 @@ public class Wish{
         return imgDataPath;
     }
 
-    public List<Lists> getLists() {
-        return lists;
-    }
-
     public void setWishID(int wishID) {
         this.wishID = wishID;
     }
@@ -55,9 +47,6 @@ public class Wish{
     }
     public void setImgDataPath(String imgDataPath) {
         this.imgDataPath = imgDataPath;
-    }
-    public void setLists(List<Lists> lists) {
-        this.lists = lists;
     }
 
 

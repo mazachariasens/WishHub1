@@ -8,8 +8,8 @@ public class Lists {
     int userID;
 
     public Lists(String listName, int listID, int userID) {
-        this.listID = listID;
         this.listName = listName;
+        this.listID = listID;
         this.userID = userID;
     }
 

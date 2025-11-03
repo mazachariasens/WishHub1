@@ -14,18 +14,39 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+//  GENERAL DOCUMENTATION AND EXPLANATION
+
+// ResultSet:
+// ResultSet is a Java Interface in the java.sql package. It can hold the result of database query(the raw data), i. e.
+// the result of executing a SELECT statement.
+// Each row in the result corresponds to one record, and each column maps to a field that the query includes in its SELECT statement.
+// The JdbcTemplate class reads from this ResultSet, and converts rows of SQL data by a rowmapper into Java objects.
+
+// When reading from the ResultSet, after a query, the methods .getInt() and .getString() are used to retrieve values from columns
+ //specified by " ", and the method .next() moves the implicit *cursor down to the next row, where .getInt() and getString().
+
+// By default, the ResultSet is read-only and it is read from top and dowwwards, with the .next() method.
+
+// *Cursor refers to where the current row to be read from is - imagine a little arrow that points out from the row, on the row that is beign in focus by Java's in-memo´ry.
+
+// The use of this Interface acts as a bridge between raw SQL data and the java objects in the application.
+//
+
 
 @org.springframework.stereotype.Repository
 public class Repository {
 
-        @Value("${spring.datasource.url}")
-        private String dbUrl;
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
-        @Value("${spring.datasource.username}")
-        private String username;
+    @Value("${spring.datasource.username}")
+    private String username;
 
-        @Value("${spring.datasource.password}")
-        private String password;
+    @Value("${spring.datasource.password}")
+    private String password;
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -54,8 +75,8 @@ public class Repository {
             rs.getString("ImgDataPath"));
 
     private final RowMapper<Lists> listsRowMapper = (rs, rowNum) -> new Lists(
-            rs.getString("ListID"),
             rs.getString("ListName"),
+            rs.getInt("ListID"),
             rs.getInt("UserID"));
 
 
@@ -66,6 +87,8 @@ public class Repository {
     // Method to insert a new user into the database
     //Controller method and service method ought to insert the values by a User object, that they have create into this
     //placeholder.
+
+    //WHY DOES IT NEED TO HAVE A USER OBJECT?
     public User createUserAndReturn(User user) {
         String sql = "INSERT INTO users (UserName, PasswordHash, Email) VALUES (?, ?, ?)";
 
@@ -146,12 +169,30 @@ public class Repository {
         return rowsAffected > 0;
     }
 
+    //Method 5 ___________________________________________________________________________________________________
 
+    //Opens a List from main view of the user's lists, where the wishes are all presentd.
 
+    //There can only be selected a list pertaining the logged-in user. A check on user exists here, despite the user selecting a
+    //wish list from a view where only the appropriate lists to the user are shown.
 
+    //The clause: WHERE Lists.ListID = ? AND Lists.UserID = ?, ensures that only wishes pertaining the speicific user are selected.
 
+    public List<Wish> getWishesByListAndUser(int listId, int userId) {
+        String sql = """
+        SELECT Wishes.WishID, Wishes.WishName, Wishes.Description, Wishes.ImgDataPath
+        FROM Wishes
+        JOIN ListsRelationship ON Wishes.WishID = ListsRelationship.WishID
+        JOIN Lists ON ListsRelationship.ListID = Lists.ListID
+        WHERE Lists.ListID = ? AND Lists.UserID = ?""";
 
+        return jdbcTemplate.query(sql, wishRowMapper, listId, userId);
+    }
 
+    //Method 6 ___________________________________________________________________________________________________
 
+    public Lists createNewList(Lists lists) {
+        String sql = "INSERT INTO lists (ListName) VALUES (?, ?)";
 
+    }
 }
