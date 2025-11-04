@@ -164,12 +164,12 @@ public class Repository {
 
     public boolean deleteListAndWishes(int listId, int userId) {
         // Step 1: verify ownership
-        Integer ownerId = jdbcTemplate.queryForObject(
+        Integer tempUserID = jdbcTemplate.queryForObject(
                 "SELECT UserID FROM Lists WHERE ListID = ?",
                 Integer.class,
                 listId
         );
-        if (ownerId == null || ownerId != userId) {
+        if (tempUserID == null || tempUserID != userId) {
             return false; // not authorized to delete
         }
 
@@ -208,7 +208,7 @@ public class Repository {
     //aaaaaand, a userID, as a WishList is personal. The userID should be obtained from the logged-in user.(in the session?).
 
     //
-    public Lists createNewList(Lists lists, int userID) {
+    public Lists createNewWishList(Lists lists, int userID) {
         String sql = "INSERT INTO Lists (ListName, UserID) VALUES (?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -226,14 +226,10 @@ public class Repository {
 
     //Method 7 _____________________________________________________________________________________________________
 
+    //Retrieves all the lists, so that they can be shown by name and the user can be shown too on the template.
+
     public List<Lists> getAllListsByUser(int userID) {
         String sql = "SELECT ListID, ListName, UserID FROM Lists WHERE UserID = ?";
         return jdbcTemplate.query(sql, listsRowMapper, userID);
     }
-
-
-
-
-
-
 }
