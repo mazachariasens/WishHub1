@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mine ønskelister - WishHub</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Header med login-status -->
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main>
+  <h1>Mine ønskelister</h1>
+
+  <!-- Ingen ønskelister -->
+  <div th:if="${#lists.isEmpty(wishlists)}" class="first-wishlist">
+    <p>Du har ingen ønskelister endnu – opret din første ønskeliste!</p>
+    <a th:href="@{/wishlists/create}" class="create-button">+ Opret ønskeliste</a>
+  </div>
+
+  <!-- Hvis der er ønskelister -->
+  <div th:if="${!#lists.isEmpty(wishlists)}">
+    <ul>
+      <li th:each="list : ${wishlists}">
+        <span th:text="${list.title}"></span>
+        <a th:href="@{/wishlists/{id}/edit(id=${list.id})}">Rediger</a>
+        <a th:href="@{/wishlists/{id}/delete(id=${list.id})}">Slet</a>
+        <!-- Не существует в repo and controller -->
+        <a th:href="@{/wishlists/{id}/share(id=${list.id})}">Del</a>
+        <!-- Не существует в repo and controller -->
+        <a th:href="@{/wishlists/{id}(id=${list.id})}">Se detaljer</a>
+      </li>
+    </ul>
+    <a th:href="@{/wishlists/create}" class="create-button">+ Opret ny ønskeliste</a>
+  </div>
+</main>
+</body>
+</html>

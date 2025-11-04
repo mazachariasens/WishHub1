@@ -10,7 +10,7 @@
 
 <main>
     <h1>Opret bruger</h1>
-    <form th:action="@{/registrer}" method="post">
+    <form th:action="@{/registrer}" method="post" th:object="${user}">
         <label for="name"> Navn: </label>
         <input type="text" id="name" name="name" required>
 

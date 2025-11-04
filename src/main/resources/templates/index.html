@@ -8,15 +8,41 @@
 <body>
 <div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
 
-<main>
-    <h1>Velkommen til WishHub!</h1>
-    <p>
-        <a th:href="@{/login}">Log ind</a> eller
-        <a th:href="@{/registrer}">opret en bruger</a> for at komme i gang.
-    </p>
-</main>
+<main class="main-container">
 
-<script th:src="@{/js/script.js}"></script>
+    <h1>Welcome to WishHub</h1>
+
+    <!-- Buttons shown depending on login state -->
+    <div class="button-group">
+        <button th:if="${!isLoggedIn}" th:onclick="'window.location.href=\'/login\''">Log ind</button>
+        <button th:if="${!isLoggedIn}" th:onclick="'window.location.href=\'/registrer\''">Opret bruger</button>
+        <button th:if="${isLoggedIn}" th:onclick="'window.location.href=\'/wishlists\''">Gå til ønskelister</button>
+        <button th:if="${isLoggedIn}" th:onclick="'window.location.href=\'/logout\''">Log ud</button>
+    </div>
+
+    <!-- Show login form if not logged in -->
+    <section th:if="${!isLoggedIn}" class="login-container">
+        <h2>Log ind</h2>
+        <form th:action="@{/login}" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Din email" required>
+
+            <label for="password">Adgangskode:</label>
+            <input type="password" id="password" name="password" placeholder="••••••" required>
+
+            <button type="submit">Log ind</button>
+        </form>
+        <p th:if="${error}" th:text="${error}" class="error-message"></p>
+    </section>
+
+    <!-- Show user's wishlists if logged in -->
+    <section th:if="${isLoggedIn}">
+        <h2>Dine ønskelister</h2>
+        <ul>
+            <li th:each="list : ${userLists}" th:text="${list.name}"></li>
+        </ul>
+    </section>
+
+</main>
 </body>
 </html>
-

@@ -12,6 +12,12 @@ public class Wish{
     private String description;
     private String imgDataPath;
 
+    //The purpose of writing a blank constructor is to create
+    //an instance of the User object, where I wish to have this instance populated later, rather than imidiatly at the
+    //creation of its instance.
+    public Wish() {
+
+    }
 
     public Wish(int wishID, String wishName, String description, String imgdatapath) {
         this.wishID = wishID;

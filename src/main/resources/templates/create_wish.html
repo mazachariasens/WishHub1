@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Opret nyt ønske - WishHub</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main>
+  <h1>Opret nyt ønske</h1>
+
+  <form th:action="@{/wishlists/{id}/wishes/create(id=${wishListId})}" method="post" class="form-box">
+    <label for="title">Titel:</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="description">Beskrivelse:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="link">Produktlink (valgfrit):</label>
+    <input type="url" id="link" name="link" placeholder="https://...">
+
+    <label for="quantity">Antal:</label>
+    <select id="quantity" name="quantity">
+      <option th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i}"></option>
+    </select>
+
+    <button type="submit">Gem ønske</button>
+  </form>
+
+  <a th:href="@{/wishlists/{id}(id=${wishListId})}" class="button">⬅ Tilbage</a>
+</main>
+</body>
+</html>

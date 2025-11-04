@@ -5,6 +5,7 @@ import com.example.wishhubproto.model.User;
 
 import com.example.wishhubproto.model.Wish;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -46,9 +47,6 @@ import java.util.List;
 //   in the SELECT statement. MODULARITY. This avoids breaking the contract between methods and retreiving uncessarry data.
 //   Mapping reliability in other words.
 
-
-
-
 @org.springframework.stereotype.Repository
 public class Repository {
 
@@ -64,7 +62,7 @@ public class Repository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public UserRepository(JdbcTemplate jdbcTemplate) {
+    public Repository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -91,6 +89,10 @@ public class Repository {
             rs.getString("ListName"),
             rs.getInt("ListID"),
             rs.getInt("UserID"));
+
+    public Repository() {
+        jdbcTemplate = null;
+    }
 
 
     //METHOD 1 ______________________________________________________________________________________________________
@@ -232,4 +234,22 @@ public class Repository {
         String sql = "SELECT ListID, ListName, UserID FROM Lists WHERE UserID = ?";
         return jdbcTemplate.query(sql, listsRowMapper, userID);
     }
+
+    //Method 8 ______________________________________________________________________________________________________
+    public User authenticateUser(User user) {
+        String sql = "SELECT * FROM users WHERE UserName = ?";
+
+        try {
+            User foundUser = jdbcTemplate.queryForObject(sql, userRowMapper, user.getUserName());
+
+            if (foundUser.getPasswordHash().equals(user.getPasswordHash())) {
+                return foundUser;
+            } else {
+                return null;
+            }
+        } catch (EmptyResultDataAccessException e) {
+            return null; // No user found with that username
+        }
+    }
+
 }

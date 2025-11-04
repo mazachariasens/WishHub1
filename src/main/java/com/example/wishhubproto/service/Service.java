@@ -53,8 +53,8 @@ public class Service {
     public List<Lists> getAllListsByUser(int userID) {
         return getAllListsByUser(userID);
     }
-
-
-
-
+    //Method 8  in repo -
+    public User authenticateUser(User user) {
+        return authenticateUser(user);
+    }
 }

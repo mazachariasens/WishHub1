@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Rediger ønskeliste - WishHub</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main>
+  <h1>Rediger ønskeliste</h1>
+
+  <form th:action="@{/wishlists/{id}/edit(id=${wishlist.id})}" method="post" class="form-box">
+    <label for="title">Titel:</label>
+    <input type="text" id="title" name="title" th:value="${wishlist.title}" required>
+
+    <label for="description">Beskrivelse:</label>
+    <textarea id="description" name="description" th:text="${wishlist.description}" required></textarea>
+
+    <button type="submit">Gem ændringer</button>
+  </form>
+
+  <a th:href="@{/wishlists/{id}(id=${wishlist.id})}" class="button">⬅ Tilbage</a>
+</main>
+</body>
+</html>

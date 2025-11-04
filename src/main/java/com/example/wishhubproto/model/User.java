@@ -9,6 +9,12 @@ public class User {
     private String email;
     private Timestamp createdAtTimeOf;
 
+    //The purpose of writing a blank constructor, is, e.g. when I use it in the login get controller method, to create
+    //an instance of the User object, where I wish to have this instance populated later, rather than imidiatly at the
+    //creation of its instance.
+    public User() {
+    }
+
     public User(int userID, String userName, String passwordHash, String email, Timestamp createdAtTimeOf) {
         this.userID = userID;
         this.userName = userName;
