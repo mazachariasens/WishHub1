@@ -5,6 +5,7 @@ import dk.datamatiker.wishhub.model.Wish;
 import dk.datamatiker.wishhub.model.WishList;
 import dk.datamatiker.wishhub.repository.WishListRepository;
 import dk.datamatiker.wishhub.repository.WishRepository;
+import dk.datamatiker.wishhub.repository.WishlistRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,11 @@ import java.util.UUID;
 
 @Service
 public class WishListService {
+    WishlistRepo wishlistRepository;
+
+    public WishListService(WishlistRepo wishlistRepository){
+        this.wishlistRepository = wishlistRepository;
+    }
 
     @Autowired
     private WishListRepository wishListRepository;
@@ -24,9 +30,9 @@ public class WishListService {
     private UserService userService;
 
     // ===== Hent ønskelister for bruger =====
-    public List<WishList> getWishlistsForUser(Long userId) {
-        return wishListRepository.findByUserId(userId);
-    }
+//    public List<WishList> getWishlistsForUser(Long userId) {
+//        return wishListRepository.findByUserId(userId);
+//    }
 
     // ===== Opret ønskeliste =====
     public void createWishList(Long userId, WishList wishList) {
@@ -102,4 +108,17 @@ public class WishListService {
             wishRepository.deleteById(id);
         }
     }
+
+    public List<WishList> getAll(){
+        return wishlistRepository.getAll();
+    }
+
+    public void addAttraction(WishList wishlist){
+        wishlistRepository.addAttraction(wishlist);
+    }
+
+    public WishList findWishlistByTitle(String title){
+        return wishlistRepository.findWishlistByTitle(title);
+    }
 }
+

@@ -22,6 +22,8 @@ public class WishList {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private int userID;
+
     @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
@@ -31,6 +33,14 @@ public class WishList {
         this.title = title;
         this.description = description;
         this.user = user;
+    }
+
+    public int getUserID(){
+        return userID;
+    }
+
+    public void setUserID(int userID){
+        this.userID = userID;
     }
 
     // Getters og setters
