@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rediger ønske - WishHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main>
+    <h1>Rediger ønske</h1>
+
+    <form th:action="@{/wishlists/{wishlistId}/wishes/{wishId}/edit(wishlistId=${wishListId}, wishId=${wish.id})}" method="post" class="form-box">
+        <label for="title">Titel:</label>
+        <input type="text" id="title" name="title" th:value="${wish.title}" required>
+
+        <label for="description">Beskrivelse:</label>
+        <textarea id="description" name="description" th:text="${wish.description}" required></textarea>
+
+        <label for="link">Produktlink:</label>
+        <input type="url" id="link" name="link" th:value="${wish.link}" placeholder="https://...">
+
+        <label for="quantity">Antal:</label>
+        <select id="quantity" name="quantity">
+            <option th:each="i : ${#numbers.sequence(1, 10)}"
+                    th:value="${i}"
+                    th:text="${i}"
+                    th:selected="${i == wish.quantity}">
+            </option>
+        </select>
+
+        <button type="submit">Gem ændringer</button>
+    </form>
+
+    <a th:href="@{/wishlists/{id}(id=${wishListId})}" class="button">⬅ Tilbage</a>
+</main>
+</body>
+</html>

@@ -6,13 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<!-- Header -->
 <div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
 
 <main class="login-container">
     <h1>Log ind</h1>
 
-    <form th:action="@{/login}" method="post" class="login-form">
+    <form th:action="@{/login}" method="post">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Din email" required>
 
@@ -22,16 +21,11 @@
         <button type="submit">Log ind</button>
     </form>
 
-    <!-- Fejlbesked -->
     <p th:if="${error}" th:text="${error}" class="error-message"></p>
 
-    <p class="register-link">
-        Har du ikke en konto?
-        <a th:href="@{/registrer}">Opret bruger</a>
+    <p>
+        Har du ikke en konto? <a th:href="@{/registrer}">Opret bruger</a>
     </p>
 </main>
-
-<script th:src="@{/js/scripts.js}"></script>
 </body>
 </html>
-

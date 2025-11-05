@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${wishList.title}">Ønskeliste detaljer</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main class="wishlist-details">
+    <h1 th:text="${wishList.title}">Ønskeliste</h1>
+    <p th:text="${wishList.description}">Beskrivelse...</p>
+
+    <div class="wishlist-actions">
+        <a th:href="@{/wishlists}" class="button">⬅ Tilbage</a>
+        <a th:href="@{/wishlists/{id}/share(id=${wishList.id})}" class="button">🔗 Del ønskeliste</a>
+        <a th:href="@{/wishlists/{id}/edit(id=${wishList.id})}" class="button">✏️ Rediger ønskeliste</a>
+        <a th:href="@{/wishlists/{id}/delete(id=${wishList.id})}" class="button delete">🗑️ Slet ønskeliste</a>
+    </div>
+
+    <hr>
+
+    <!-- Hvis ønskelisten ikke har ønsker -->
+    <div th:if="${#lists.isEmpty(wishes)}" class="empty-wishlist">
+        <p>Din ønskeliste er tom.</p>
+        <a th:href="@{/wishlists/{id}/wishes/create(id=${wishList.id})}" class="create-button">➕ Opret ønske her</a>
+    </div>
+
+    <!-- Hvis ønskelisten HAR ønsker -->
+    <div th:if="${!#lists.isEmpty(wishes)}" class="wish-table">
+        <h2>Ønsker</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Titel</th>
+                <th>Antal</th>
+                <th>Link</th>
+                <th>Handlinger</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="wish : ${wishes}">
+                <td th:text="${wish.title}"></td>
+                <td th:text="${wish.quantity}"></td>
+                <td>
+                    <a th:href="${wish.link}" target="_blank" class="link-icon">🌐</a>
+                </td>
+                <td>
+                    <a th:href="@{/wishlists/{wishlistId}/wishes/{wishId}/edit(wishlistId=${wishList.id}, wishId=${wish.id})}">✏️</a>
+                    <a th:href="@{/wishlists/{wishlistId}/wishes/{wishId}/delete(wishlistId=${wishList.id}, wishId=${wish.id})}"
+                       class="delete">🗑️</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/wishlists/{id}/wishes/create(id=${wishList.id})}" class="create-button">+ Tilføj nyt ønske</a>
+    </div>
+</main>
+</body>
+</html>

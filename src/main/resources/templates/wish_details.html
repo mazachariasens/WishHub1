@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${wish.title}">Ønske detaljer</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
+
+<main>
+    <h1 th:text="${wish.title}">Ønske titel</h1>
+    <p th:text="${wish.description}">Ønske beskrivelse</p>
+
+    <p><strong>Antal:</strong> <span th:text="${wish.quantity}"></span></p>
+    <p th:if="${wish.link}">
+        <a th:href="${wish.link}" target="_blank">🔗 Gå til produkt</a>
+    </p>
+
+    <a th:href="@{/wishlists/{id}(id=${wishList.id})}" class="button">⬅ Tilbage</a>
+</main>
+</body>
+</html>

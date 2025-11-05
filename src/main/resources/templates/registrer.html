@@ -8,9 +8,12 @@
 <body>
 <div th:replace="fragments/header :: header(isLoggedIn=${isLoggedIn})"></div>
 
+<-- der mangler et tomt user objekt/model som kab populates
+<-- der mangler et tomt thymeleaf
+
 <main>
     <h1>Opret bruger</h1>
-    <form th:action="@{/registrer}" method="post">
+    <form th:action="@{/registrer}" method="post" th:object = >
         <label for="name">Navn:</label>
         <input type="text" id="name" name="name" required>
 
