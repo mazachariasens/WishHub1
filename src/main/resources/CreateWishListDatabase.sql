@@ -1,0 +1,39 @@
+CREATE DATABASE IF NOT EXISTS wishlistdatabase;
+USE wishlistdatabase;
+
+CREATE TABLE Wishes (
+    WishID INT AUTO_INCREMENT PRIMARY KEY,
+    WishName VARCHAR(255) NOT NULL,
+    Description TEXT,
+    ImgDataPath VARCHAR(500)
+);
+
+CREATE TABLE users (
+	UserID INT AUTO_INCREMENT PRIMARY KEY,
+    UserName VARCHAR(100) NOT NULL UNIQUE, 
+    PasswordHash VARCHAR(50) NOT NULL,
+    Email VARCHAR(250) NOT NULL,
+    CreatedAtTimeOf TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+CREATE TABLE Lists (
+    ListID INT AUTO_INCREMENT PRIMARY KEY,
+    ListName VARCHAR(255) NOT NULL,
+    UserID INT,
+    FOREIGN KEY(UserID) REFERENCES users(UserID)
+    );
+
+CREATE TABLE ListsRelationship (
+    WishID INT NOT NULL,
+    ListID INT NOT NULL,
+    
+    PRIMARY KEY (WishID, ListID),
+    FOREIGN KEY (WishID) REFERENCES Wishes(WishID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (ListID) REFERENCES Lists(ListID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+    
+    
