@@ -14,14 +14,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/wishlists")
 public class WishListController {
+    WishListService wishlistService;
 
-    @Autowired
-    private WishListService wishListService;
+    public WishListController(WishListService wishlistService){
+        this.wishlistService = wishlistService;
+    }
+
 
     // ===== Hent alle ønskelister for logget bruger =====
     @GetMapping
-    public String getAllWishlists(Model model, HttpSession session, @SessionAttribute("userId") Long userId) {
-        List<WishList> wishlists = wishListService.getWishlistsForUser(userId);
+    public String getAllWishlists(Model model, @SessionAttribute("userId") int userId) {
+        List<WishList> wishlists = wishlistService.getAll(userId);
         model.addAttribute("wishlists", wishlists);
         model.addAttribute("isLoggedIn", true);
         return "wishlists";
@@ -29,13 +32,10 @@ public class WishListController {
 
     // ===== Hent ønskeliste detaljer =====
     @GetMapping("/{id}")
-    public String getWishlistDetails(@PathVariable Long id, Model model,
-                                     HttpSession session,
-                                     @SessionAttribute("userId") Long userId,
-                                     RedirectAttributes redirectAttributes) {
-        WishList wishList = wishListService.getWishListById(id);
-        if (wishList == null || !wishList.getUser().getId().equals(userId)) {
-            redirectAttributes.addFlashAttribute("error", "Ønskelisten findes ikke eller tilhører ikke dig.");
+    public String getWishlistDetails(Model model, @SessionAttribute("userId") int userId, @PathVariable int id) {
+
+        WishList wishList = wishlistService.findWishlistById(id);
+        if (wishList == null || !(wishList.getUserId() == userId)) {
             return "redirect:/wishlists";
         }
         model.addAttribute("wishlist", wishList);
@@ -53,19 +53,19 @@ public class WishListController {
 
     @PostMapping("/create")
     public String createWishlist(@ModelAttribute WishList wishlist,
-                                 @SessionAttribute("userId") Long userId) {
-        wishListService.createWishList(userId, wishlist);
+                                 @SessionAttribute("userId") int userId) {
+        wishlistService.createWishList(userId, wishlist);
         return "redirect:/wishlists";
     }
 
     // ===== Rediger ønskeliste =====
     @GetMapping("/{id}/edit")
-    public String editWishlistForm(@PathVariable Long id, Model model,
+    public String editWishlistForm(@PathVariable int id, Model model,
                                    HttpSession session,
                                    @SessionAttribute("userId") Long userId,
                                    RedirectAttributes redirectAttributes) {
-        WishList wishlist = wishListService.getWishListById(id);
-        if (wishlist == null || !wishlist.getUser().getId().equals(userId)) {
+        WishList wishlist = wishlistService.getWishlistById(id);
+        if (wishlist == null || !(wishlist.getUserId() == userId)) {
             redirectAttributes.addFlashAttribute("error", "Ønskelisten findes ikke eller tilhører ikke dig.");
             return "redirect:/wishlists";
         }
@@ -75,11 +75,11 @@ public class WishListController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editWishlist(@PathVariable Long id,
+    public String editWishlist(@PathVariable int id,
                                @ModelAttribute WishList wishlist,
-                               @SessionAttribute("userId") Long userId,
+                               @SessionAttribute("userId") int userId,
                                RedirectAttributes redirectAttributes) {
-        boolean updated = wishListService.updateWishList(id, wishlist, userId);
+        boolean updated = wishlistService.updateWishList(id, wishlist, userId);
         if (!updated) {
             redirectAttributes.addFlashAttribute("error", "Kun ejeren kan opdatere ønskelisten.");
         }
@@ -88,10 +88,10 @@ public class WishListController {
 
     // ===== Slet ønskeliste =====
     @PostMapping("/{id}/delete")
-    public String deleteWishlist(@PathVariable Long id,
-                                 @SessionAttribute("userId") Long userId,
+    public String deleteWishlist(@PathVariable int id,
+                                 @SessionAttribute("userId") int userId,
                                  RedirectAttributes redirectAttributes) {
-        boolean deleted = wishListService.deleteWishList(id, userId);
+        boolean deleted = wishlistService.deleteWishList(id, userId);
         if (!deleted) {
             redirectAttributes.addFlashAttribute("error", "Kun ejeren kan slette ønskelisten.");
         }
@@ -100,10 +100,10 @@ public class WishListController {
 
     // ===== Del ønskeliste =====
     @GetMapping("/{id}/share")
-    public String shareWishlist(@PathVariable Long id,
-                                @SessionAttribute("userId") Long userId,
+    public String shareWishlist(@PathVariable int id,
+                                @SessionAttribute("userId") int userId,
                                 RedirectAttributes redirectAttributes) {
-        String link = wishListService.generateShareLink(id, userId);
+        String link = wishlistService.generateShareLink(id, userId);
         if (link == null) {
             redirectAttributes.addFlashAttribute("error", "Kun ejeren kan dele ønskelisten.");
             return "redirect:/wishlists";

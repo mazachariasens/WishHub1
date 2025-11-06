@@ -1,5 +1,6 @@
 package dk.datamatiker.wishhub.controller;
 
+import dk.datamatiker.wishhub.model.User;
 import dk.datamatiker.wishhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,8 @@ public class HomeController {
                                Model model,
                                HttpSession session) {
         try {
-            Long userId = userService.opretBruger(name, email, password);
-            session.setAttribute("userId", userId); // log automatisk ind
+            User user = userService.opretBruger(name, email, password);
+            session.setAttribute("userId", user.getId()); // log automatisk ind
             return "redirect:/wishlists";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
@@ -57,9 +58,10 @@ public class HomeController {
                             @RequestParam String password,
                             HttpSession session,
                             Model model) {
-        Long userId = userService.login(email, password);
-        if (userId != null) {
-            session.setAttribute("userId", userId);
+
+        User user = userService.login(email, password);
+        if (user != null) {
+            session.setAttribute("userId", user.getId());
             return "redirect:/wishlists";
         } else {
             model.addAttribute("error", "Forkert email eller adgangskode.");

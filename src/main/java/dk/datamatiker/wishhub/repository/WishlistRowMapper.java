@@ -11,9 +11,10 @@ public class WishlistRowMapper implements RowMapper<WishList> {
     @Override
     public WishList mapRow(ResultSet rs, int rowNum) throws SQLException {
         WishList wishlist = new WishList();
+        wishlist.setId(rs.getInt("id"));
         wishlist.setTitle(rs.getString("title"));
         wishlist.setDescription(rs.getString("description"));
-        wishlist.setUserID(rs.getInt("user_id"));
+        wishlist.setUserId(rs.getInt("user_id"));
 
         return wishlist;
     }
