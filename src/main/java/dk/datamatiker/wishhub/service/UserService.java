@@ -23,10 +23,8 @@ public class UserService {
 //        return user.getId();
 //    }
 
-    public User opretBruger(String name, String email, String password) {
-        User user = new User(name, email, password);
-        userRepository.save(user);
-        return user;
+    public User opretBruger(User newUser) {
+        return userRepository.save(newUser);
     }
 
     // ===== Login =====

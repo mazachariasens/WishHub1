@@ -3,8 +3,12 @@ package dk.datamatiker.wishhub.repository;
 import dk.datamatiker.wishhub.model.User;
 import dk.datamatiker.wishhub.model.WishList;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -43,8 +47,26 @@ public class UserRepo {
         return user;
     }
 
-    public void save(User user) {
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getPassword());
+    public User save(User user) {
+        String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            return ps;
+        }, keyHolder);
+        //keyHolder); is the second argument to the jdbcTemplate.update() method.
+
+        // Get the auto-generated ID from the insert
+        int newUserId = keyHolder.getKey().intValue();
+
+        // Returns the full inserte d user (to include timestamp)
+        //The returned object can be used in a controller method to confirm if a new user was created +
+        //the new user can be displayed.
+        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE id = ?", new UserRowMapper(), newUserId);
     }
 }
