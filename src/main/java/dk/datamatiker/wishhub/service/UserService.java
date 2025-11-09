@@ -30,17 +30,6 @@ public class UserService {
     }
 
     // ===== Login =====
-//    public Long login(String email, String password) {
-//        Optional<User> optionalUser = userRepository.findByEmail(email);
-//        if (optionalUser.isPresent()) {
-//            User user = optionalUser.get();
-//            if (user.getPassword().equals(password)) { // simpelt, kan krypteres senere
-//                return user.getId();
-//            }
-//        }
-//        return null;
-//    }
-
     public User login(String email, String password) {
         User user = userRepo.findUserByEmail(email);
         if (user != null && password.equals(user.getPassword())) {

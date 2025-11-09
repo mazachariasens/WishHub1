@@ -10,9 +10,9 @@
 
 <main>
     <h1>Velkommen til WishHub!</h1>
-    <p>
-        <a th:href="@{/login}">Log ind</a> eller
-        <a th:href="@{/registrer}">Opret en bruger</a> for at komme i gang.
+    <p th:if="${!isLoggedIn}" >
+        <a th:href="@{/user/login}">Log ind</a> eller
+        <a th:href="@{/user/registrer}">Opret en bruger</a> for at komme i gang.
     </p>
 </main>
 </body>

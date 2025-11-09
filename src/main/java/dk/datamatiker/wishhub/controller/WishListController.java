@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
 @Controller
 @RequestMapping("/wishlists")
 public class WishListController {
-    WishListService wishlistService;
+    private final WishListService wishlistService;
 
-    public WishListController(WishListService wishlistService){
+    public WishListController(WishListService wishlistService) {
         this.wishlistService = wishlistService;
     }
 

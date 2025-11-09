@@ -12,12 +12,12 @@
 
             <!-- Hvis brugeren er logget ind -->
             <li th:if="${isLoggedIn == true}">
-                <a th:href="@{/logout}">Log ud</a>
+                <a th:href="@{/user/logout}">Log ud</a>
             </li>
 
             <!-- Hvis brugeren IKKE er logget ind -->
             <li th:if="${isLoggedIn == false}">
-                <a th:href="@{/login}">Log ind</a>
+                <a th:href="@{/user/login}">Log ind</a>
             </li>
         </ul>
     </nav>
