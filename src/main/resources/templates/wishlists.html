@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
     <title>Mine ønskelister - WishHub</title>
@@ -26,7 +26,7 @@
                 <a th:href="@{/wishlists/{id}/edit(id=${list.id})}">Rediger</a>
                 <a th:href="@{/wishlists/{id}/delete(id=${list.id})}">Slet</a>
                 <a th:href="@{/wishlists/{id}/share(id=${list.id})}">Del</a>
-                <a th:href="@{/wishlists/{id}/wishes(id=${list.id})}">Se detaljer</a>
+                <a th:href="@{/wishlists/{id}(id=${list.id})}">Se detaljer</a>
             </li>
         </ul>
         <a th:href="@{/wishlists/create}" class="create-button">+ Opret ny ønskeliste</a>
